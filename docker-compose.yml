@@ -96,6 +96,12 @@ services:
             - HUB_PORT_4444_TCP_ADDR=seleniumhub
         depends_on:
             - seleniumhub
+    backup:
+        image: ubuntu
+        volumes:
+            - "jenkinsvol:/var/jenkins_home"
+            - "nexusvol:/sonatype-work"
+            - "sonardbvol:/var/lib/postgresql/data"
 volumes:
       jenkinsvol: {}
       sonardbvol: {}
