@@ -1,4 +1,4 @@
 #!/bin/sh
-docker volume rm buildmachine_jenkinsvol
-docker volume rm buildmachine_nexusvol
-docker volume rm buildmachine_sonardbvol
+docker volume rm ${COMPOSE_PROJECT_NAME}_jenkinsvol
+docker volume rm ${COMPOSE_PROJECT_NAME}_nexusvol
+docker volume rm ${COMPOSE_PROJECT_NAME}_sonardbvol

@@ -6,10 +6,10 @@ docker ps --all
 docker rm $IMAGE
 docker ps --all
 echo running...
-docker run -d --name $IMAGE -v buildmachine_sonardbvol:/var/lib/postgresql/data postgres
+docker run -d --name $IMAGE -v ${COMPOSE_PROJECT_NAME}_sonardbvol:/var/lib/postgresql/data postgres
 echo sleeping...
 sleep 20
-cat $1 | docker exec -i $IMAGE psql -Upostgres
+cat $1/sonar.sql | docker exec -i $IMAGE psql -Upostgres
 docker stop $IMAGE
 docker rm $IMAGE
 docker ps --all

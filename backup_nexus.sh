@@ -1,2 +1,2 @@
 #!/bin/sh
-./backup.sh buildmachine_nexus_1 /sonatype-work nexus
+./backup.sh /sonatype-work $1 nexus.tar.gz

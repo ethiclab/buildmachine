@@ -1,2 +1,2 @@
 #!/bin/sh
-docker exec -t buildmachine_sonardb_1 pg_dumpall -Upostgres -c > backup/dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+docker exec -t ${COMPOSE_PROJECT_NAME}_sonardb_1 pg_dumpall -Upostgres -c > backup/$1/sonar.sql

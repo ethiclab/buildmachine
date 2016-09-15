@@ -98,6 +98,9 @@ services:
             - seleniumhub
     backup:
         image: ubuntu
+        entrypoint: /bin/sh -c "while true; do sleep 1; done"
+        networks:
+            - prodnetwork
         volumes:
             - "jenkinsvol:/var/jenkins_home"
             - "nexusvol:/sonatype-work"

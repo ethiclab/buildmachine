@@ -1,2 +1,2 @@
 #!/bin/sh
-./backup.sh buildmachine_jenkins_1 /var/jenkins_home jenkins
+./backup.sh /var/jenkins_home $1 jenkins.tar.gz

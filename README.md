@@ -10,6 +10,7 @@ Create a file with the same content of env-devel-local.sh and the modify its con
 according to your system.
 
 `````
+    export COMPOSE_PROJECT_NAME=buildmachine
     export DOMAIN=local
     export ENV=devel
     export PROXY_PORT=80
@@ -95,6 +96,7 @@ For instance, if you want your urls look like:
 You can create a file env-prod-mycompany.com-8888.sh with the following content:
 
 `````
+    export COMPOSE_PROJECT_NAME=buildmachine
     export DOMAIN=mycompany.com
     export ENV=prod
     export PROXY_PORT=8888
@@ -111,3 +113,56 @@ apply that file to the current shell session
 `````
 
 do not forget to update your name resolution records
+
+Backup
+======
+
+With all the ecosystem started, just issue the following command:
+
+`````
+. env-devel-local.sh
+./backup_all.sh
+`````
+
+This will create a backup folder and within it a folder will be created with the name: YYYY-MM-DD_HHmmss
+
+There three files will be created:
+
+1. jenkins.tar.gz
+2. nexus.tar.gz
+3. sonar.sql
+
+Restore
+=======
+
+In order to simulate a new system, we will stop the current ecosystem and will delete the shared volumes.
+
+`````
+. env-devel-local.sh
+./stop.sh
+./remove_volumes.sh
+`````
+
+At this point, before we start a new ecosystem we will restore a saved state:
+
+`````
+. env-devel-local.sh
+./create_volumes.sh
+./restore_all.sh backup/YYYY-MM-DD_HHmmss
+`````
+
+Then we can start the system normally:
+
+`````
+. env-devel-local.sh
+./start.sh
+`````
+
+Scale
+=====
+
+You can scale services by issuing:
+
+`````
+docker-compose scale web=2
+`````
