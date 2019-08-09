@@ -1,43 +1,18 @@
-version: '2'
+version: '3'
 
 networks:
     prodnetwork:
         driver: bridge
 
 services:
-    nginx-proxy:
-        image: ethiclab/buildmachine-nginx-proxy
-        container_name: nginx-proxy
-        ports:
-            - "${PROXY_PORT}:80"
-        networks:
-            prodnetwork:
-                aliases:
-                    - web-${ENV}.${DOMAIN}
-                    - sonar-${ENV}.${DOMAIN}
-                    - nexus-${ENV}.${DOMAIN}
-                    - jenkins-${ENV}.${DOMAIN}
-                    - seleniumhub-${ENV}.${DOMAIN}
-        volumes:
-            - "/var/run/docker.sock:/tmp/docker.sock:ro"
-
-    web:
-        image: nginx
-        networks:
-            - prodnetwork
-        environment:
-            - VIRTUAL_HOST=web-${ENV}.${DOMAIN}
-            - VIRTUAL_PORT=80
-
     jenkins:
-        image: ethiclab/buildmachine-jenkins
+        image: jenkinsci/blueocean
+        ports:
+            - 20000:8080
         networks:
             - prodnetwork
         volumes:
             - "jenkinsvol:/var/jenkins_home"
-        environment:
-            - VIRTUAL_HOST=jenkins-${ENV}.${DOMAIN}
-            - VIRTUAL_PORT=8080
 
     nexus:
         image: sonatype/nexus
@@ -45,12 +20,11 @@ services:
             - prodnetwork
         volumes:
             - "nexusvol:/sonatype-work"
-        environment:
-            - VIRTUAL_HOST=nexus-${ENV}.${DOMAIN}
-            - VIRTUAL_PORT=8081
+        ports:
+            - 20001:8081
 
     sonar:
-        image: ethiclab/buildmachine-sonar
+        image: sonarqube
         networks:
             - prodnetwork
         depends_on:
@@ -58,8 +32,6 @@ services:
         restart: "always"
         environment:
             - SONARQUBE_JDBC_URL=jdbc:postgresql://sonardb:5432/sonar
-            - VIRTUAL_HOST=sonar-${ENV}.${DOMAIN}
-            - VIRTUAL_PORT=9000
 
     sonardb:
         image: postgres
@@ -75,9 +47,6 @@ services:
         image: selenium/hub
         networks:
             - prodnetwork
-        environment:
-            - VIRTUAL_HOST=seleniumhub-${ENV}.${DOMAIN}
-            - VIRTUAL_PORT=4444
 
     nodeff:
         image: selenium/node-firefox
@@ -96,6 +65,7 @@ services:
             - HUB_PORT_4444_TCP_ADDR=seleniumhub
         depends_on:
             - seleniumhub
+
     backup:
         image: ubuntu
         entrypoint: /bin/sh -c "while true; do sleep 1; done"

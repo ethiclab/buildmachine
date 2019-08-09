@@ -3,6 +3,10 @@ Getting started
 
 Install docker and docker-compose for your platform
 
+# Install http proxy
+
+https://github.com/ethiclab/docker-nginx-http-proxy
+
 Configure default settings
 ==========================
 
